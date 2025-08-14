@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'baseApp', # APP_1
-    'users', # APP_2 for user authentication
     'rest_framework', # Rest Framework for API development
 ]
 
@@ -125,4 +124,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = 'users.User'  # app_name.model_name
+# AUTH_USER_MODEL = 'users.User'  # app_name.model_name

@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from baseApp.views import GenreApiViewSet
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path("genres/", GenreApiViewSet.as_view({'get':'list', 'post':'create', 'put':'update', 'delete':'destroy'}), name='genre-list'),
 ]
