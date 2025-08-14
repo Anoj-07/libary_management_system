@@ -16,10 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from baseApp.views import GenreApiViewSet
+from rest_framework.routers import DefaultRouter
+from baseApp.views import GenreApiViewSet, BookAPiViewSet
+
+router = DefaultRouter()
+router.register(r'genres', GenreApiViewSet, basename='genre')
+router.register(r'books', BookAPiViewSet, basename='book')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    path("genres/", GenreApiViewSet.as_view({'get':'list', 'post':'create', 'put':'update', 'delete':'destroy'}), name='genre-list'),
-]
+] + router.urls
