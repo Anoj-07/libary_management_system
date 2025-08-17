@@ -47,10 +47,10 @@ class Book(models.Model):
 
 def default_due_date():
     """
-    Returns a default due date 14 days from today.
+    Returns a default due date 7 days from today.
     Django migrations can serialize this function, unlike a lambda.
     """
-    return timezone.now().date() + timedelta(days=14)
+    return (timezone.now() + timezone.timedelta(days=7)).date()  
 
 
 class BorrowRecord(models.Model):
@@ -69,14 +69,13 @@ class BorrowRecord(models.Model):
         User,  # Custom user model defined in settings.py
         on_delete=models.CASCADE,
         limit_choices_to={'role': 'MEMBER'},
-        help_text="The member who borrowed the book."
+        help_text="The member who borrowed the book.",
+        null=True, blank=True
     )
-    borrow_date = models.DateField(default=timezone.now, help_text="Date when the book was borrowed.")
-    due_date = models.DateField(
-        default=default_due_date,
-        help_text="Date when the book should be returned."
-    )
-    return_date = models.DateField(null=True, blank=True, help_text="Date when the book was actually returned.")
+    borrow_date = models.DateTimeField(auto_now_add=True, help_text="Time when the book was borrow.")
+    due_date = models.DateTimeField(default=default_due_date, help_text="Due date for returning the book (default: 14 days from borrow date)."  )
+    return_date = models.DateTimeField(null=True, blank=True)
+
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
