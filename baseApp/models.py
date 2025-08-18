@@ -52,6 +52,9 @@ def default_due_date():
     """
     return (timezone.now() + timezone.timedelta(days=7)).date()  
 
+def get_today():
+    return timezone.now().date()
+
 
 class BorrowRecord(models.Model):
     """
@@ -72,9 +75,10 @@ class BorrowRecord(models.Model):
         help_text="The member who borrowed the book.",
         null=True, blank=True
     )
-    borrow_date = models.DateTimeField(auto_now_add=True, help_text="Time when the book was borrow.")
-    due_date = models.DateTimeField(default=default_due_date, help_text="Due date for returning the book (default: 14 days from borrow date)."  )
-    return_date = models.DateTimeField(null=True, blank=True)
+    
+    borrow_date = models.DateField(default=get_today, help_text="Date when the book was borrowed.")    
+    due_date = models.DateField(default=default_due_date, help_text="Date when the book should be returned.")
+    return_date = models.DateField(null=True, blank=True, help_text="Date when the book was actually returned.")
 
     status = models.CharField(
         max_length=10,
