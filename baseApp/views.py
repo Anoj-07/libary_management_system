@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from .models import Genre, Book, BorrowRecord
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import GenreSerializer, BookSerializer, BorrowRecordSerializer
+from .serializers import GenreSerializer, BookSerializer, BorrowRecordSerializer, UserSerializer
 from django.utils import timezone
+
+from django.contrib.auth.models import User
 
 
 class GenreApiViewSet(ModelViewSet):
@@ -68,3 +70,25 @@ class BorrowRecordViewSet(ModelViewSet):
         overdue_records = BorrowRecord.objects.filter(status="OVERDUE")
         serializer = self.get_serializer(overdue_records, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+# Model for Auhthentication
+class UserApiView(GenreApiViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    permission_classes = ([])  # No authentication required for this view and from setting above all views require authentication
+
+    def register(self, request):
+        """
+        Custom endpoint: POST /register/
+        Registers a new user:
+        - Accepts username, password, email, first_name, last_name
+        - Hashes the password before saving
+        """
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

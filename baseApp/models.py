@@ -6,7 +6,7 @@ from datetime import timedelta
 
 # Create your models here.
 
-# class for genre
+# Model for genre
 class Genre(models.Model):
     """
     Represents a category or type of book.
@@ -19,7 +19,7 @@ class Genre(models.Model):
     def __str__(self):
         return self.name
 
-# class for book
+# Model for book
 class Book(models.Model):
     """
     Represents a book in the library's collection.
@@ -56,6 +56,7 @@ def get_today():
     return timezone.now().date()
 
 
+# Model for borrowing records
 class BorrowRecord(models.Model):
     """
     Tracks the borrowing history of books.

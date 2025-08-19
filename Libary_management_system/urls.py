@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from baseApp.views import GenreApiViewSet, BookAPiViewSet, BorrowRecordViewSet
+from baseApp.views import GenreApiViewSet, BookAPiViewSet, BorrowRecordViewSet, UserApiView
 
 router = DefaultRouter()
 router.register(r'genres', GenreApiViewSet, basename='genre')
@@ -39,4 +39,6 @@ urlpatterns = [
     path('borrow-records/overdue/', 
          BorrowRecordViewSet.as_view({'get': 'overdue'}), 
          name='borrowrecord-overdue-list'),
+
+    path('register/', UserApiView.as_view({'post': 'register'}))
 ] + router.urls
