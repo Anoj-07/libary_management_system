@@ -129,12 +129,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # REST Framework settings for token authentication
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",  # Default permission class for all views
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication"
-    ],  # Token authentication for API views
+    'DEFAULT_PERMISSION_CLASSES' : [
+        "rest_framework.permissions.IsAuthenticated",  # Default permission class for all views 
+        ],
+    "DEFAULT_AUTHENTICATION_CLASSES" : [
+        'rest_framework.authentication.TokenAuthentication'],  # Token authentication for API views
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 10,  # Default page size for pagination
 }

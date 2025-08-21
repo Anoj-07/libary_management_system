@@ -70,11 +70,9 @@ class BorrowRecord(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE, help_text="The book being borrowed.")
     member = models.ForeignKey(
-        User,  # Custom user model defined in settings.py
+        User, 
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'MEMBER'},
         help_text="The member who borrowed the book.",
-        null=True, blank=True
     )
     
     borrow_date = models.DateField(default=get_today, help_text="Date when the book was borrowed.")    
