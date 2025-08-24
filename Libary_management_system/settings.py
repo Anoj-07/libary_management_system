@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "baseApp",  # APP_1
     "rest_framework.authtoken",  # Token authentication for DRF
     "rest_framework",  # Rest Framework for API development
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -134,6 +135,16 @@ REST_FRAMEWORK = {
         ],
     "DEFAULT_AUTHENTICATION_CLASSES" : [
         'rest_framework.authentication.TokenAuthentication'],  # Token authentication for API views
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 10,  # Default page size for pagination
+
+    # Default filter backends for searching & filtering
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+
+    # Default pagination settings
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # Default items per page
+
 }

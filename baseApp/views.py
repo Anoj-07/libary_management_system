@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Genre, Book, BorrowRecord
 from rest_framework.viewsets import ModelViewSet, GenericViewSet, ReadOnlyModelViewSet
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.response import Response
 from .serializers import (
     GenreSerializer,
@@ -18,6 +18,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class GenreApiViewSet(ModelViewSet):
@@ -25,11 +27,26 @@ class GenreApiViewSet(ModelViewSet):
     serializer_class = GenreSerializer
     permission_classes = [DjangoModelPermissions]
 
+# for pagination
+class PaginationViewSet(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 class BookAPiViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [DjangoModelPermissions]
+    # for pagination
+    pagination_class = PaginationViewSet
+
+    # for filtering and searching by title, author, or genre
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "author", "genre__name"]
+    filterset_fields = ["genre__name"]
+
+
+
 
 
 class BorrowRecordViewSet(ModelViewSet):
@@ -47,6 +64,19 @@ class BorrowRecordViewSet(ModelViewSet):
     # The serializer responsible for converting model instances to JSON and vice versa
     serializer_class = BorrowRecordSerializer
     permission_classes = [DjangoModelPermissions]
+
+    # for filtering and searching
+    pagination_class = PaginationViewSet
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ["member__username", "due_date"]
+
+    # Search by member name or book title
+    search_fields = ["member__username", "book__title"]
+
+    # Allow ordering (sorting) by due_date or borrow_date
+    ordering_fields = ["borrow_date", "due_date", "status"]
+    ordering = ["-borrow_date"]  # default ordering
+
 
 
     # ---------------- Custom Actions ---------------- #
@@ -173,4 +203,8 @@ class MemberApiViewSet(ReadOnlyModelViewSet):
             return users
         except Group.DoesNotExist:
             return User.objects.none()
+
+
+
+
 
