@@ -50,7 +50,7 @@ def default_due_date():
     Returns a default due date 7 days from today.
     Django migrations can serialize this function, unlike a lambda.
     """
-    return (timezone.now() + timezone.timedelta(days=7)).date()  
+    return (timezone.now() + timedelta(days=7)).date()
 
 def get_today():
     return timezone.now().date()
